@@ -8,15 +8,15 @@ SAMPLE_DATA = """7 6 4 2 1
 1 3 6 7 9"""
 
 
-def safe_increase(input: list[int]) -> bool:
+def safe_increase(inputs: list[int]) -> bool:
     # subsequent elements must increase by 1 to 3
-    steps = [b - a for a, b in pairwise(input)]
+    steps = [b - a for a, b in pairwise(inputs)]
     return all(1 <= n <= 3 for n in steps)
 
 
-def safe_decrease(input: list[int]) -> bool:
+def safe_decrease(inputs: list[int]) -> bool:
     # subsequent elements must decrease by 1 to 3
-    steps = [a - b for a, b in pairwise(input)]
+    steps = [a - b for a, b in pairwise(inputs)]
     return all(1 <= n <= 3 for n in steps)
 
 
@@ -29,6 +29,7 @@ def count_safe(rows: list[list[int]]) -> int:
 
 
 def try_safe(row: list[int]) -> bool:
+    # brute force, can we make a row safe by removing one value?
     for n in range(len(row)):
         temp_row = row.copy()
         temp_row.pop(n)
@@ -38,7 +39,7 @@ def try_safe(row: list[int]) -> bool:
 
 
 
-def test_02a_sample():
+def test_02a_sample() -> None:
     rows = []
     for line in SAMPLE_DATA.splitlines():
         row = [int(n) for n in line.split()]
@@ -49,13 +50,13 @@ def test_02a_sample():
     assert safe == 2
 
 
-def test_02a(day02_number_grid):
+def test_02a(day02_number_grid) -> None:
     safe = count_safe(day02_number_grid)
 
     assert safe == 559
 
 
-def test_02b_sample():
+def test_02b_sample() -> None:
     rows = []
     for line in SAMPLE_DATA.splitlines():
         row = [int(n) for n in line.split()]
@@ -67,16 +68,16 @@ def test_02b_sample():
     for row in unsafe_rows:
         if try_safe(row):
             safe += 1
-    
+
     assert safe == 4
 
 
-def test_02b(day02_number_grid):
+def test_02b(day02_number_grid) -> None:
     unsafe_rows = [row for row in day02_number_grid if not safe_row(row)]
     safe = len(day02_number_grid) - len(unsafe_rows)
     for row in unsafe_rows:
         if try_safe(row):
             safe += 1
-    
+
     assert safe == 601
 

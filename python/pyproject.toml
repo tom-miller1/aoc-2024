@@ -14,3 +14,14 @@ dev = [
 
 [tool.pytest.ini_options]
 aoc_year = 2024
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "D", # don't require documentation
+    "PLR2004", # ignore magic values
+    "S101", # allow assert in tests
+]
