@@ -3,7 +3,9 @@ name = "aoc-2024"
 version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "lark>=1.2.2",
+]
 
 [dependency-groups]
 dev = [
