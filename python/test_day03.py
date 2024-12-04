@@ -3,13 +3,13 @@ import re
 SAMPLE_INPUT = "xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))"
 SAMPLE_INPUT2 = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"
 
+
 def parse_input(token_stream: str) -> int:
     mul_sum = 0
     if matches := re.finditer(r"mul\((\d{1,3}),(\d{1,3})\)", token_stream):
         for match in matches:
             mul_sum += int(match.group(1)) * int(match.group(2))
     return mul_sum
-
 
 
 def test_03a_sample() -> None:

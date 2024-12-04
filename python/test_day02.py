@@ -38,7 +38,6 @@ def try_safe(row: list[int]) -> bool:
     return False
 
 
-
 def test_02a_sample() -> None:
     rows = []
     for line in SAMPLE_DATA.splitlines():
@@ -80,4 +79,3 @@ def test_02b(day02_number_grid) -> None:
             safe += 1
 
     assert safe == 601
-
