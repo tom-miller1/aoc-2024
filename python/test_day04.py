@@ -1,5 +1,3 @@
-import re
-
 SAMPLE_INPUT = """MMMSXXMASM
 MSAMXMSMSA
 AMXSXMAAMM
@@ -12,70 +10,123 @@ MAMMMXMMMM
 MXMXAXMASX"""
 
 
-def input_to_array(grid: str) -> list[list[str]]:
-    return [list(line) for line in grid.splitlines()]
-
-
-def rotate90(puzzle: list[list[str]]) -> list[list[str]]:
-    result = []
-    for n in range(len(puzzle[0])):
-        result.append([])
-        for m in range(len(puzzle)):
-            result[n].append(puzzle[m][n])
-    return result
-
-
-def rotate45(puzzle: list[list[str]]) -> list[list[str]]:
-    m = len(puzzle)
-    n = len(puzzle[0])
-    result = [[] for _ in range(m + n - 1)]
-    # first half
-    for y in range(m):
-        diagonal_elements = min(m - 1, y, n - 1)
-        diagonal_cnt = 0
-        while y <= m - 1 and diagonal_elements >= 0:
-            result[y].append(puzzle[y - diagonal_cnt][diagonal_cnt])
-            diagonal_cnt += 1
-            diagonal_elements -= 1
-    # second half
-    for x in range(1, n):
-        diagonal_elements = min(m - 1, n - x - 1)
-        diagonal_cnt = 0
-        while x <= n - 1 and diagonal_elements >= 0:
-            result[m + x - 1].append(puzzle[m - 1 - diagonal_cnt][x + diagonal_cnt])
-            diagonal_cnt += 1
-            diagonal_elements -= 1
-    return result
-
-
-def count_matches(array: list[list[str]]) -> int:
+def brute_force_pt1(puzzle: list[str]) -> int:
     count = 0
-    for line in array:
-        text = "".join(line)
-        if matches := re.findall(r"(?=(XMAS|SAMX))", text):
-            count += len(matches)
+    height = len(puzzle)
+    width = len(puzzle[0])
+    for y in range(height):
+        for x in range(width):
+            # find starting point at X
+            if puzzle[y][x] == "X":
+                # up
+                if y >= 3 and puzzle[y - 1][x] + puzzle[y - 2][x] + puzzle[y - 3][x] == "MAS":
+                    count += 1
+                # up and left
+                if y >= 3 and x >= 3 and puzzle[y - 1][x - 1] + puzzle[y - 2][x - 2] + puzzle[y - 3][x - 3] == "MAS":
+                    count += 1
+                # up and right
+                if (
+                    y >= 3
+                    and x <= width - 4
+                    and puzzle[y - 1][x + 1] + puzzle[y - 2][x + 2] + puzzle[y - 3][x + 3] == "MAS"
+                ):
+                    count += 1
+                # left
+                if x >= 3 and puzzle[y][x - 1] + puzzle[y][x - 2] + puzzle[y][x - 3] == "MAS":
+                    count += 1
+                # right
+                if x <= width - 4 and puzzle[y][x + 1] + puzzle[y][x + 2] + puzzle[y][x + 3] == "MAS":
+                    count += 1
+                # down
+                if y <= height - 4 and puzzle[y + 1][x] + puzzle[y + 2][x] + puzzle[y + 3][x] == "MAS":
+                    count += 1
+                # down and left
+                if (
+                    y <= height - 4
+                    and x >= 3
+                    and puzzle[y + 1][x - 1] + puzzle[y + 2][x - 2] + puzzle[y + 3][x - 3] == "MAS"
+                ):
+                    count += 1
+                # down and right
+                if (
+                    y <= height - 4
+                    and x <= width - 4
+                    and puzzle[y + 1][x + 1] + puzzle[y + 2][x + 2] + puzzle[y + 3][x + 3] == "MAS"
+                ):
+                    count += 1
     return count
 
 
-def test_01a_sample() -> None:
-    puzzle = input_to_array(SAMPLE_INPUT)
-    count = count_matches(puzzle)
-    count += count_matches(rotate90(puzzle))
-    count += count_matches(rotate45(puzzle))
-    count += count_matches(rotate45(rotate90(puzzle)))
+def brute_force_pt2(puzzle: list[str]) -> int:
+    count = 0
+    height = len(puzzle)
+    width = len(puzzle[0])
+    for y in range(height):
+        for x in range(width):
+            # find starting point at A
+            if puzzle[y][x] == "A":
+                # MM
+                # SS
+                if (
+                    width - 2 >= x >= 1
+                    and height - 2 >= y >= 1
+                    and puzzle[y - 1][x - 1] == "M"
+                    and puzzle[y - 1][x + 1] == "M"
+                    and puzzle[y + 1][x - 1] == "S"
+                    and puzzle[y + 1][x + 1] == "S"
+                ):
+                    count += 1
+                # SS
+                # MM
+                if (
+                    width - 2 >= x >= 1
+                    and height - 2 >= y >= 1
+                    and puzzle[y - 1][x - 1] == "S"
+                    and puzzle[y - 1][x + 1] == "S"
+                    and puzzle[y + 1][x - 1] == "M"
+                    and puzzle[y + 1][x + 1] == "M"
+                ):
+                    count += 1
+                # MS
+                # MS
+                if (
+                    width - 2 >= x >= 1
+                    and height - 2 >= y >= 1
+                    and puzzle[y - 1][x - 1] == "M"
+                    and puzzle[y - 1][x + 1] == "S"
+                    and puzzle[y + 1][x - 1] == "M"
+                    and puzzle[y + 1][x + 1] == "S"
+                ):
+                    count += 1
+                # SM
+                # SM
+                if (
+                    width - 2 >= x >= 1
+                    and height - 2 >= y >= 1
+                    and puzzle[y - 1][x - 1] == "S"
+                    and puzzle[y - 1][x + 1] == "M"
+                    and puzzle[y + 1][x - 1] == "S"
+                    and puzzle[y + 1][x + 1] == "M"
+                ):
+                    count += 1
+    return count
+
+
+def test_04a_sample() -> None:
+    count = brute_force_pt1(SAMPLE_INPUT.splitlines())
     assert count == 18
 
 
-def test_01a(day04_text) -> None:
-    from pprint import pprint
+def test_04a(day04_lines) -> None:
+    count = brute_force_pt1(day04_lines)
+    assert count == 2454
 
-    puzzle = input_to_array(day04_text)
-    count = count_matches(puzzle)
-    print(count)
-    count += count_matches(rotate90(puzzle))
-    print(count)
-    count += count_matches(rotate45(puzzle))
-    pprint(rotate45(puzzle), width=800)
-    print(count)
-    count += count_matches(rotate45(rotate90(puzzle)))
-    assert count == 2508
+
+def test_04b_sample() -> None:
+    count = brute_force_pt2(SAMPLE_INPUT.splitlines())
+    assert count == 9
+
+
+def test_04b(day04_lines) -> None:
+    count = brute_force_pt2(day04_lines)
+    assert count == 1858
