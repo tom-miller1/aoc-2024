@@ -10,7 +10,7 @@ MAMMMXMMMM
 MXMXAXMASX"""
 
 
-def brute_force_pt1(puzzle: list[str]) -> int:
+def brute_force_pt1(puzzle: list[str]) -> int:  # noqa: C901
     count = 0
     height = len(puzzle)
     width = len(puzzle[0])
@@ -117,7 +117,7 @@ def test_04a_sample() -> None:
     assert count == 18
 
 
-def test_04a(day04_lines) -> None:
+def test_04a(day04_lines: str) -> None:
     count = brute_force_pt1(day04_lines)
     assert count == 2454
 
@@ -127,6 +127,6 @@ def test_04b_sample() -> None:
     assert count == 9
 
 
-def test_04b(day04_lines) -> None:
+def test_04b(day04_lines: str) -> None:
     count = brute_force_pt2(day04_lines)
     assert count == 1858

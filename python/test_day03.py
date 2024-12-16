@@ -16,7 +16,7 @@ def test_03a_sample() -> None:
     assert parse_input(SAMPLE_INPUT) == 161
 
 
-def test_03a(day03_text) -> None:  # noqa: ANN001
+def test_03a(day03_text: str) -> None:
     assert parse_input(day03_text) == 161289189
 
 
@@ -25,6 +25,6 @@ def test_03b_sample() -> None:
     assert parse_input(trimmed_input) == 48
 
 
-def test_03b(day03_text) -> None:  # noqa: ANN001
+def test_03b(day03_text: str) -> None:
     trimmed_input = re.sub(r"don't\(\).*?do\(\)", "", day03_text, flags=re.DOTALL)
     assert parse_input(trimmed_input) == 83595109
