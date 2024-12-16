@@ -38,9 +38,9 @@ def test_01b_sample() -> None:
     assert calculate_similarity(lines) == 31
 
 
-def test_01a(day01_lines) -> None:
+def test_01a(day01_lines: str) -> None:
     assert calculate_distance(day01_lines) == 1388114
 
 
-def test_01b(day01_lines) -> None:
+def test_01b(day01_lines: str) -> None:
     assert calculate_similarity(day01_lines) == 23529853

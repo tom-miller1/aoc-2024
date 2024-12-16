@@ -49,7 +49,7 @@ def test_02a_sample() -> None:
     assert safe == 2
 
 
-def test_02a(day02_number_grid) -> None:
+def test_02a(day02_number_grid: str) -> None:
     safe = count_safe(day02_number_grid)
 
     assert safe == 559
@@ -71,7 +71,7 @@ def test_02b_sample() -> None:
     assert safe == 4
 
 
-def test_02b(day02_number_grid) -> None:
+def test_02b(day02_number_grid: str) -> None:
     unsafe_rows = [row for row in day02_number_grid if not safe_row(row)]
     safe = len(day02_number_grid) - len(unsafe_rows)
     for row in unsafe_rows:
